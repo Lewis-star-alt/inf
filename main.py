@@ -1,14 +1,15 @@
-def prime(n):
-    return all(n % d != 0 for d in range(2, int(n**0.5) + 1))
-for n in range(2, 100):
-    if prime(n):
-            s = ">" + "0" * 21 + "2" * 11 + "1" * n
-            while ">1" in s or ">2" in s or ">0" in s:
-                if ">1" in s:
-                    s = s.replace(">1", "22>", 1)
-                if ">2" in s:
-                    s = s.replace(">2", "2>", 1)
-                if ">0" in s:
-                    s = s.replace(">0", "1>", 1)
-            if sum(int(i) for i in s if i != ">") % n == 0:
-                print(n)
+from itertools import *
+
+def f(x):
+    P = 1023 <= x <= 2148
+    Q = 1362 <= x <= 3898
+    R = 1813 <= x <= 2566
+    A = a1 <= x <+ a2
+    return ((not Q) <= (P or R)) <= ((not A) <= (not Q))
+
+ox = [i/4 for i in range(1022*4, 3898*4+1)]
+m = []
+for a1, a2 in combinations(ox, 2):
+     if all(f(x) for x in ox):
+         m.append(a2-a1)
+print(min(m))
