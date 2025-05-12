@@ -2,11 +2,11 @@
 ```python
 from itertools import permutations
 
-a = "4578 367 26 15 148 238 128 1567".split()
-s = "АЗ АБ БЖ БЗ ЖЗ БВ ВЖ ЖЕ ЕД ЕГ ДГ ВГ".split()
+a = "346 45 16 12567 24 1347 46".split()
+s = "АЖ АБ БЖ БЕ БД ЕД БВ ВД ВГ ДГ".split()
 
-print("1 2 3 4 5 6 7 8")
-for p in permutations("АБВГДЕЖЗ"):
+print("1 2 3 4 5 6 7")
+for p in permutations("АБВГДЕЖ"):
     if all(str(p.index(x) + 1) in a[p.index(y)] for x, y in s):
         print(*p)
 ```
@@ -17,22 +17,24 @@ for x in 0,1:
     for y in 0,1:
         for w in 0,1:
             for z in 0,1:
-                f = (x and y) or (y == z) or w
-                if f == 0:
+                f = (x or (not y)) and (not (x == z)) and (not w)
+                if f:
                     print(x, y, w, z)
 ```
 ## 5
 ```python
-for n in range(4,100):
-    b = bin(n)[2:]
-    print(b)
-    r = b[:-1] + b[0:2]
-    print(r)
-    r = int(r[::-1], 2)
-    print(r)
-    if r == 123 and b[-1] == "0":
-        print(n)
-        break
+c  = 0
+for n in range(100_000_000, 200_000_001):
+    sm = sum(map(int, str(n)))
+    b = bin(sm)[2:]
+    if b.count("1") % 2 == 0:
+        b = "1" + b + "00"
+    else:
+        b = "10" + b + "1"
+    r = int(b, 2)
+    if r == 21:
+        c += 1
+print(c)
 ```
 ## 6
 ```python
@@ -41,18 +43,14 @@ from turtle import *
 screensize(10000, 10000)
 tracer(0)
 m = 30
-rt(90 * m)
+
 for _ in range(3):
-    rt(45)
-    fd(10 * m)
-    rt(45)
+    lt(90)
+    for i in range(4):
+        fd(5 * m)
+        rt(90)
 
-rt(315)
-fd(10 * m)
 
-for _ in range(2):
-    rt(90)
-    fd(10 * m)
 
 up()
 for x in range(-30, 30):
@@ -64,18 +62,17 @@ exitonclick()
 ```
 ## 7
 ```python
-from math import floor
-print(floor((10**6*300)/(1024*768*12)))
+print((967 * 1024 * 1024 * 8) / (4 * 192 * 1000 * 16))
 ```
 ## 8
 ```python
-from itertools import permutations
+from itertools import *
 c = 0
-s = "ГЛУБИНА"
 for w in permutations("ГЛУБИНА"):
-    if all(w.index(i) != s.index(i) for i in w):
-        c += 1
+    w = "".join(w)
+    if "ГА" not in w and w.index("Г") < w.index("А"):
         print(w)
+        c += 1
 print(c)
 ```
 ## 9
@@ -83,15 +80,18 @@ print(c)
 c = 0
 for line in open("tmp.txt"):
     a = [int(i) for i in line.split()]
-
+    p = [i for i in a if a.count(i) == 2]
     np = [i for i in a if a.count(i) == 1]
     m = max(a)
-    if len(np) == 6 and (max(a) + min(a)) / 2 < (sum(a) - max(a) - min(a)) / 4:
+    if len(p) == 2 and len(np) == 4 and (max(a) + min(a)) / 2 > (sum(a) - max(a) - min(a)) / 4:
         c += 1
 print(c)
 ```
 ## 12
 ```python
+def prime(n):
+    return n > 1 and all(n % d != 0 for d in range(2, int(n**0.5)+1))
+
 for n in range(2, 100):
             s = ">" + "0" * 39 + "1" * n + 39 * "2"
             while ">1" in s or ">2" in s or ">0" in s:
@@ -101,8 +101,9 @@ for n in range(2, 100):
                     s = s.replace(">2", "2>", 1)
                 if ">0" in s:
                     s = s.replace(">0", "1>", 1)
-            if sum(int(i) for i in s if i != ">") in [i**2 for i in range(20)]:
-                print(n)
+            r = sum(int(i) for i in s if i != ">")
+            if prime(r):
+                print(r, n)
 ```
 
 ## 13
@@ -111,76 +112,67 @@ from ipaddress import *
 c = 0
 ans = []
 for m in range(33):
-    net1 = ip_network(f"176.213.225.119/{m}", 0)
-    net2 = ip_network(f"176.213.195.58/{m}", 0)
+    net1 = ip_network(f"161.137.200.35/{m}", 0)
+    net2 = ip_network(f"161.137.150.118/{m}", 0)
     if net1.network_address != net2.network_address:
         print(net1.network_address)
 ```
 ## 14
 ```python
-for x in range(1, 7050):
-    n = 5**100 - x
+for x in range(1, 3001):
+    n = 7**100 - x
     s = ""
     while n:
-        s += str(n % 5)
-        n //= 5
-    if s.count("0") == 3:
+        s += str(n % 7)
+        n //= 7
+    if s.count("0") == 2:
         print(x)
 ```
 ## 15
 ```python
-from itertools import *
-
-def f(x):
-    P = 1023 <= x <= 2148
-    Q = 1362 <= x <= 3898
-    R = 1813 <= x <= 2566
-    A = a1 <= x <+ a2
-    return ((not Q) <= (P or R)) <= ((not A) <= (not Q))
-
-ox = [i/4 for i in range(1022*4, 3898*4+1)]
-m = []
-for a1, a2 in combinations(ox, 2):
-     if all(f(x) for x in ox):
-         m.append(a2-a1)
-print(min(m))
+print(min(a for a in range(1000) if all((11 <= y) or (7*y < x) or (a > x*y) for x in range(1000) for y in range(1000))))
 ```
 ## 16
 ```python
 from sys import setrecursionlimit
 setrecursionlimit(10**7)
 
+def g(n):
+    if n < 10:
+        return n
+    if n >= 10:
+        return g(n - 2) + 1
+
+
 def f(n):
-    if n == 1:
-        return  1
-    if n >1:
-        return n + f(n-1)
+    return g(n - 1)
+
 c = 0
 for i in range(1, 101):
-    if f(2023) // f(i) % 2 == 0:
+    if f(i)**0.5 == int(f(i)**0.5):
         c += 1
+        print(f(i))
 print(c)
 ```
 ## 17
 ```python
 a = [int(i) for i in open("tmp.txt")]
-m = [i for i in a if i % 1000 == 151]
-s = sum(m) / len(m)
-ans = []
+m = min(i for i in a if 10 <= abs(i) <= 99 and i % sum(map(int, str(i))) == 0)
 
-for x, y, z in zip(a, a[1:], a[2:]):
-    d = [x, y, z]
-    cet = sum(1 for i in d if 1000 <= i <= 9999)
-    if 1 < cet < 3 and sum(1 for i in d if i % 13 == 0) > sum(1 for i in d if i % 7 == 0) and all(i > s for i in d):
-        ans.append(x+y+z)
+ans = []
+for x, y in zip(a, a[1:]):
+    if x % m == 0 or y % m == 0:
+        ans.append(x+y)
 print(len(ans), min(ans))
 ```
 ## 19-21
 ```python
 def F(s, n):
-    if s >= 100: return n % 2 == 0
+    if s == 0: return n % 2 == 0
     if n == 0: return 0
-    h = [F(s+7, n-1),  F(s*2,n-1)]
+    h = [F(s//3,n-1)]
+    if s >= 5:
+        h.append(F(s-5, n-1))
     return any(h) if n % 2 != 0 else all(h)
 
 
@@ -191,13 +183,15 @@ print(f"21. {[s for s in range(1, 100) if not F(s, 2) and F(s, 4)]}")
 ## 23
 ```python
 def f(n, end):
-    if n < end or n == 33:
+    if n > end:
+        return 0
+    if n == 20:
         return 0
     if n == end:
         return 1
-    return f(n-3, end) + f(n-4, end)
+    return f(n+1, end) + f(n+3, end) + f(n**2, end)
 
-print(f(44,19))
+print(f(2,15) * f(15, 35))
 ```
 ## 24
 ```python
@@ -205,25 +199,19 @@ import re
 
 s = open("tmp.txt").readline()
 
-num = r"[1-9ABCDEFGHI][0-9ABCDEFGHI]*"
-print(sorted([c for c in re.findall(num, s) if int(c, 19) % 2 == 0], key=lambda x: int(x, 19)))
+pat1 = r"(?:[A-Z][0-9])*"
+pat2 = r"(?:[0-9][A-Z])*"
+
+print(max(len(c) for c in re.findall(pat1, s)))
+print(max(len(c) for c in re.findall(pat2, s)))
 ```
 ## 25
 ```python
 from fnmatch import fnmatch
 
-def divs(n):
-    d = []
-    for i in range(2, n+1):
-        if n % i == 0 and i % 2 == 0:
-            d.append(i)
-    return d
-
-
-for n in range(65000, 1_000_000):
-    if fnmatch(str(n), "6*97*5?") and len(divs(n)) >= 4:
-        print(n, sum(divs(n)))
-        input()
+for i in range(2273, 10**9, 2273):
+    if fnmatch(str(i), "5*35?5*1"):
+        print(i, i // 2273)
 ```
 ## 27
 ```python
