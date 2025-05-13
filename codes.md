@@ -89,21 +89,14 @@ print(c)
 ```
 ## 12
 ```python
+from fnmatch import fnmatch
+
 def prime(n):
     return n > 1 and all(n % d != 0 for d in range(2, int(n**0.5)+1))
 
-for n in range(2, 100):
-            s = ">" + "0" * 39 + "1" * n + 39 * "2"
-            while ">1" in s or ">2" in s or ">0" in s:
-                if ">1" in s:
-                    s = s.replace(">1", "22>", 1)
-                if ">2" in s:
-                    s = s.replace(">2", "2>", 1)
-                if ">0" in s:
-                    s = s.replace(">0", "1>", 1)
-            r = sum(int(i) for i in s if i != ">")
-            if prime(r):
-                print(r, n)
+for i in range(2273, 10**9, 2273):
+    if fnmatch(str(i), "5*35?5*1") and prime(sum(map(int, str(i)))):
+        print(i, i // 2273)
 ```
 
 ## 13
