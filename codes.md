@@ -2,11 +2,11 @@
 ```python
 from itertools import permutations
 
-a = "38 3457 1258 268 23 47 26 134".split()
-s = "AG GH AF GF GD HE ED CD CF CB BF".split()
+a = "37 367 125 56 34 247 126".split()
+s = "af ab bf ad de ed eg gc cf".split()
 
-print("1 2 3 4 5 6 7 8")
-for p in permutations("ABCDEFGH"):
+print("1 2 3 4 5 6 7")
+for p in permutations("abcdefg"):
     if all(str(p.index(x) + 1) in a[p.index(y)] for x, y in s):
         print(*p)
 ```
@@ -17,7 +17,7 @@ for x in 0,1:
     for y in 0,1:
         for w in 0,1:
             for z in 0,1:
-                f = ((x or y) == (y <= z)) or w
+                f = int(((w <= z) == y) <= x)
                 if f == 0:
                     print(x, y, w, z, f)
 ```
@@ -25,16 +25,24 @@ for x in 0,1:
 ```python
 ans = []
 c = 0
-for n in range(1000):
-    r = bin(n)[3:]
-    if r.count("1") % 2 == 0:
-        r = "10" + r
+for n in range(1000, 10000):
+    s = list(map(int, str(n)))
+    odd = [i for i in s if i % 2 == 0]
+    even = [i for i in s if i % 2 != 0]
+    if len(odd) > len(even):
+        r = sum(odd)
+        c = 1
     else:
-        r = "1" + r + "0"
-    r = int(r, 2)
-    if r < 450:
-        ans.append(r)
-print(max(ans))
+        r = sum(even)
+        c = 2
+    if c == 1:
+        r = str(r) + str(max(odd))
+    elif c == 2:
+        r = str(r) + str(min(even))
+    if int(r) == 111:
+        ans.append(n)
+    c = 0
+print(len(ans))
 ```
 ## 6
 ```python
@@ -42,31 +50,31 @@ from turtle import *
 
 screensize(10000, 10000)
 tracer(0)
-m = 30
+m = 10
 
 for _ in range(2):
-    fd(10 * m)
+    fd(5 * m)
     rt(90)
-    fd(18 * m)
+    fd(11 * m)
     rt(90)
 
 up()
-fd(5 * m)
+fd(-4 * m)
 rt(90)
-fd(7 * m)
+fd(6 * m)
 lt(90)
 down()
 
 for _ in range(2):
-    fd(10 * m)
+    fd(42 * m)
     rt(90)
-    fd(7 * m)
+    fd(63 * m)
     rt(90)
 
 
 up()
-for x in range(-30, 30):
-    for y in range(-30, 30):
+for x in range(-100, 100):
+    for y in range(-100, 100):
         goto(x * m, y * m)
         dot(3, "blue")
 update()
@@ -84,26 +92,23 @@ from itertools import product
 c = 0
 for n in product("01234567", repeat=6):
     n = "".join(n)
-    if n[0] != "0" and "33" not in n and n.count("3") == 2:
-        s, f = (i for i in range(len(n)) if n[i] == "3")
+    if n[0] != "0" and "44" not in n and n.count("4") == 2:
+        s, f = (i for i in range(len(n)) if n[i] == "4")
         t = n[s+1:f]
-        if all(i in "4567" for i in t):
+        if all(i in "567" for i in t):
             c += 1
             print(n)
 print(c)
 ```
 ## 9
 ```python
-c = 0
 for line in open("tmp.txt"):
     a = [int(i) for i in line.split()]
-    a.sort()
     p = [i for i in a if a.count(i) == 2]
     np = [i for i in a if a.count(i) == 1]
-    m = max(a)
-    if len(p) == 2 and len(np) == 2 and a[-1] + a[-2] > (a[0] + a[1]) * 2 and max(a) % min(a) != 0:
-        c += 1
-print(c)
+    if len(p) == 4 and len(np) == 3 and max(a) not in p:
+        print(sum(a))
+        break
 ```
 ## 12
 ```python
